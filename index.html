@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laxmi | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060910;
+      --surface: #0d1520;
+      --border: rgba(255,255,255,0.07);
+      --accent: #00FFA3;
+      --accent2: #0095FF;
+      --text: #E8EDF5;
+      --muted: #6B7A99;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── Glow blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 {
+      width: 400px; height: 400px;
+      background: rgba(0,255,163,0.07);
+      top: -100px; left: -100px;
+    }
+    .blob-2 {
+      width: 500px; height: 500px;
+      background: rgba(0,149,255,0.05);
+      bottom: -150px; right: -150px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(6,9,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── Sections ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 5%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 120px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      border: 1px solid rgba(0,255,163,0.3);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s ease both;
+      letter-spacing: 1px;
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 14vw, 130px);
+      line-height: 0.9;
+      letter-spacing: 4px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .hero-name span {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title {
+      font-size: 18px;
+      color: var(--muted);
+      margin-top: 20px;
+      font-weight: 300;
+      animation: fadeUp 0.6s ease 0.2s both;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-title b { color: var(--text); font-weight: 600; }
+
+    .hero-desc {
+      max-width: 500px;
+      margin-top: 16px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s ease 0.4s both;
+    }
+
+    .btn-primary {
+      padding: 13px 28px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #060910;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(0,255,163,0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,255,163,0.4);
+    }
+
+    .btn-outline {
+      padding: 13px 28px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.6s ease 0.5s both;
+      flex-wrap: wrap;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ── Section Header ── */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 56px);
+      letter-spacing: 3px;
+      line-height: 1;
+      margin-bottom: 48px;
+    }
+
+    /* ── Skills ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .skill-card:hover {
+      border-color: rgba(0,255,163,0.3);
+      transform: translateY(-4px);
+    }
+
+    .skill-icon { font-size: 28px; margin-bottom: 12px; }
+    .skill-name {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .skill-level {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .skill-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 1s ease;
+    }
+
+    /* ── Projects ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: border-color 0.3s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover {
+      border-color: rgba(0,255,163,0.2);
+      transform: translateY(-4px);
+    }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-emoji { font-size: 32px; margin-bottom: 16px; }
+
+    .project-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0,255,163,0.08);
+      color: var(--accent);
+      border: 1px solid rgba(0,255,163,0.15);
+    }
+
+    .project-link {
+      font-size: 13px;
+      color: var(--accent2);
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+    .project-link:hover { gap: 10px; }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .about-text p b { color: var(--text); }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+    }
+
+    .about-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .edu-item {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .edu-item:last-child { border-bottom: none; }
+    .edu-degree { font-weight: 600; font-size: 14px; }
+    .edu-school { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .edu-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    /* ── Contact ── */
+    .contact-wrapper {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-desc {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .contact-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">LAXMI</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-tag">&#x1F44B; Available for Internships</div>
+  <h1 class="hero-name">LAXMI<br/><span>DEVS</span></h1>
+  <p class="hero-title"><b>CS &amp; Design Student</b> · 2nd Year · 4th Sem</p>
+  <p class="hero-desc">
+    Building real-world AI and Python projects. Passionate about software development,
+    APIs, and creating tools that solve everyday problems.
+  </p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn-primary">View My Projects</a>
+    <a href="https://github.com/laxmi-devs" target="_blank" class="btn-outline">GitHub Profile</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Projects Built</div>
+    </div>
+    <div>
+      <div class="stat-num">4</div>
+      <div class="stat-label">Semesters Done</div>
+    </div>
+    <div>
+      <div class="stat-num">3+</div>
+      <div class="stat-label">Tech Skills</div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="section-label">// What I Know</div>
+  <h2 class="section-title">SKILLS</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">🐍</div>
+      <div class="skill-name">Python</div>
+      <div class="skill-level">Intermediate</div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:70%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-name">AI & Claude API</div>
+      <div class="skill-level">Working Knowledge</div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:60%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Web Technologies</div>
+      <div class="skill-level">HTML · CSS · JS · PHP</div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:65%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-name">DBMS & SQL</div>
+      <div class="skill-level">Intermediate</div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:60%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-name">Computer Graphics</div>
+      <div class="skill-level">C++ · OpenGL</div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:55%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🐙</div>
+      <div class="skill-name">Git & GitHub</div>
+      <div class="skill-level">Version Control</div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:50%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="section-label">// What I Built</div>
+  <h2 class="section-title">PROJECTS</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-emoji">🤖</div>
+      <div class="project-title">AI Study Assistant</div>
+      <div class="project-desc">
+        An AI-powered CLI tool for engineering students. Supports subject-wise Q&A,
+        MCQ generation, summaries, and multi-turn conversations using Claude API.
+      </div>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Claude API</span>
+        <span class="tag">Anthropic</span>
+        <span class="tag">CLI App</span>
+      </div>
+      <a href="https://github.com/laxmi-devs/ai-study-assistant" target="_blank" class="project-link">
+        View on GitHub →
+      </a>
+    </div>
+    <div class="project-card">
+      <div class="project-emoji">💱</div>
+      <div class="project-title">Currency Converter</div>
+      <div class="project-desc">
+        A web-based currency converter with multi-currency support, PDF export,
+        and favourites feature built using HTML, CSS, PHP and JavaScript.
+      </div>
+      <div class="project-tags">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">PHP</span>
+        <span class="tag">JavaScript</span>
+      </div>
+      <a href="https://github.com/laxmi-devs" target="_blank" class="project-link">
+        View on GitHub →
+      </a>
+    </div>
+    <div class="project-card">
+      <div class="project-emoji">🎨</div>
+      <div class="project-title">Ray Tracer — Computer Graphics</div>
+      <div class="project-desc">
+        Interactive ray tracer with Blinn-Phong shading, reflections, anti-aliasing,
+        and tone mapping. Built with React Canvas and C++ OpenGL scenes.
+      </div>
+      <div class="project-tags">
+        <span class="tag">C++</span>
+        <span class="tag">OpenGL</span>
+        <span class="tag">React</span>
+        <span class="tag">Canvas</span>
+      </div>
+      <a href="https://github.com/laxmi-devs" target="_blank" class="project-link">
+        View on GitHub →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="section-label">// Who I Am</div>
+  <h2 class="section-title">ABOUT ME</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        Hi! I'm <b>Laxmi</b>, a 2nd year Engineering student passionate about
+        building real-world software projects that solve everyday problems.
+      </p>
+      <p>
+        I specialize in <b>Python development</b> and <b>AI integrations</b>.
+        I love working with APIs, building CLI tools, and exploring how AI
+        can be used to make student life easier.
+      </p>
+      <p>
+        Currently looking for <b>internship opportunities</b> where I can apply
+        my skills and learn from experienced engineers.
+      </p>
+    </div>
+    <div class="about-card">
+      <div class="about-card-title">EDUCATION</div>
+      <div class="edu-item">
+        <div class="edu-degree">B.E. Computer Science & Design</div>
+        <div class="edu-school">Autonomous College · Affiliated to VTU, India</div>
+        <div class="edu-year">2023 – 2027 (Ongoing)</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-degree">Current Semester</div>
+        <div class="edu-school">2nd Year · 4th Semester</div>
+        <div class="edu-year">Subjects: DBMS · Algorithms · Web Tech · CG</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="contact-wrapper">
+    <div class="section-label" style="text-align:center">// Get In Touch</div>
+    <h2 class="section-title" style="text-align:center">CONTACT</h2>
+    <p class="contact-desc">
+      I'm open to internships, collaborations, and project opportunities.
+      Feel free to reach out!
+    </p>
+    <div class="contact-links">
+      <a href="https://github.com/laxmi-devs" target="_blank" class="contact-btn">
+        🐙 GitHub
+      </a>
+      <a href="mailto:your-email@gmail.com" class="contact-btn">
+        ✉️ Email Me
+      </a>
+      <a href="https://linkedin.com/in/laxmi-devs" target="_blank" class="contact-btn">
+        💼 LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built with ❤️ by <span>Laxmi</span> · github.com/laxmi-devs
+</footer>
+
+</body>
+</html>
